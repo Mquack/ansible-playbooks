@@ -1,0 +1,17 @@
+---
+  - name: Install application
+    hosts: all
+    become: yes
+    tasks:
+      - name: Install curl and perl
+        apt:
+          name: 
+            - curl
+            - perl
+          state: present
+          update_cache: true
+        register: apt_result
+
+      - name: Last line to check status of prev. task.
+        debug:
+          msg: "{{apt_result}}"

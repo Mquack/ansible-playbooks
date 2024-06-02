@@ -1,0 +1,55 @@
+---
+  - name: Install application
+    hosts: newUsers
+    become: yes
+    tasks:
+      - name : Update and upgrade apt packages.
+        apt:
+          update_cache: yes
+          upgrade: 'yes'
+          cache_valid_time: 86400
+
+      - name: Install curl and perl
+        apt:
+          name:
+            - curl
+            - perl
+          state: present
+          update_cache: true
+        register: apt_result
+
+      - name: Last line to check status of prev. task.
+        debug:
+          msg: "{{apt_result}}"
+      
+      - name: Check if /home/ directory is empty
+        command: ls -A /home/
+        register: home_dir_contents
+        failed_when: home_dir_contents.rc != 0 and home_dir_contents.rc != 2
+        changed_when: false
+
+      - name: Get the hostname
+        command: hostname
+        register: hostname_result
+        changed_when: false
+
+      - name: Create a new user if /home/ directory is empty
+        user:
+          name: "{{ hostname_result.stdout }}-user"
+          state: present
+          shell: /bin/bash
+          system: no
+          create_home: yes
+          home: "/home/{{ hostname_result.stdout }}-user"
+        when: home_dir_contents.stdout == ''
+
+      - name: Print user creation message
+        debug:
+          msg: "New user {{ hostname_result.stdout }}-user created on {{ inventory_hostname }}"
+        when: home_dir_contents.stdout == ''
+
+      - name: Print no user creation message
+        debug:
+          msg: "/home/ directory is not empty on {{ inventory_hostname }}. No user created."
+        when: home_dir_contents.stdout != ''
+

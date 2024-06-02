@@ -22,9 +22,9 @@ Run the playbooks with command:
 >
 *-i*    specifies the inventory file.</br>
 *-u*    specifies the username that should connect to the computers.</br>
-This user should be able to connect via ssh to the computers, if possible via ssh-copy-id <username>@192.169.7.XX to avoid PW login each time.<\br>
+This user should be able to connect via ssh to the computers, if possible via ssh-copy-id <username>@192.169.7.XX to avoid PW login each time.</br>
 </br>
 
-**newCTBook.yml** - updates apt for the new container and installs apps. Also creates new user <hostname>-user and the corresponding home folder.<\br>
-**updateBook.yml** just runs a apt update && apt upgrade with a bit more output and reports back if any of the computers need a reboot.<\br>
-**installBook.yml** just installs curl and perl. More applications can be added to the list if needed in the future.<\br>
+**newCTBook.yml** - updates apt for the new container and installs apps. Also creates new user <hostname>-user and the corresponding home folder.</br>
+**updateBook.yml** just runs a apt update && apt upgrade with a bit more output and reports back if any of the computers need a reboot.</br>
+**installBook.yml** just installs curl and perl. More applications can be added to the list if needed in the future.</br>
